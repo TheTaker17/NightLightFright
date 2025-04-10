@@ -1,0 +1,43 @@
+INSTRUCCIONES PARA IMPLEMENTAR EL PROYECTO “Night Light Fright” EN UNITY
+
+Nombre del proyecto: Night Light Fright
+Autor: [Tu nombre]
+Repositorio: [Pegá tu enlace de GitHub aquí]
+Versión de Unity recomendada: 2022.3 LTS (u otra versión compatible que estés usando)
+
+-------------------------------
+¿CÓMO DESCARGAR Y ABRIR EL PROYECTO?
+-------------------------------
+1. Entrar al repositorio en GitHub.
+2. Hacer clic en el botón verde “Code” y seleccionar “Download ZIP”.
+3. Extraer el archivo .zip en una carpeta de tu equipo.
+4. Abrir Unity Hub.
+5. Clic en “Add” y seleccionar la carpeta descomprimida.
+6. Unity importará el proyecto automáticamente.
+
+-------------------------------
+ESTRUCTURA DEL PROYECTO
+-------------------------------
+- Assets/: Contiene escenas, scripts, animaciones, sonidos y demás recursos.
+- ProjectSettings/: Configuración del proyecto (input, gráficos, tags, etc.).
+- Packages/: Referencias a paquetes utilizados por Unity.
+
+-------------------------------
+CONTROLES BÁSICOS DEL JUEGO
+-------------------------------
+- F: Hace que el personaje principal gire 180° y encienda una linterna.
+- Movimiento del Chain Chomp: Automático, se detiene si la linterna está encendida.
+- Muerte del jugador: Ocurre si el Chain Chomp lo alcanza sin que haya usado la linterna.
+
+-------------------------------
+SONIDO
+-------------------------------
+- Efectos de sonido incluidos: giro, linterna, rugido del Chain Chomp, sonido de muerte y ambiente nocturno.
+- Todos los sonidos están gestionados por AudioSource y reproducidos mediante script.
+
+-------------------------------
+NOTAS ADICIONALES
+-------------------------------
+- Asegurate de tener una versión compatible de Unity.
+- El proyecto está preparado para correr directamente sin configuraciones adicionales.
+- Si aparece alguna advertencia de materiales o texturas, presionar "Fix All" en la ventana de importación.
