@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/PantallaInicio.unity
+    guid: 65dc9fbb710fafd4ab7f0e980fdca903
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/PantallaVictoria.unity
+    guid: b687c4304b9ea3345b01dab947cbb830
+  - enabled: 1
+    path: Assets/Scenes/PantallaDerrota.unity
+    guid: 1241c580897579e4588dde31d969036b
+  - enabled: 1
+    path: Assets/Scenes/PantallaReglas.unity
+    guid: cc21ab8822a31fc45a45f08ef2e9371b
   m_configObjects: {}

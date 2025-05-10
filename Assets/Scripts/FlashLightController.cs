@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
@@ -11,17 +11,17 @@ public class NewBehaviourScript : MonoBehaviour
     public Animator animator;
     public ChainChompController chompController; // Asignar desde el inspector
 
-    //Sonidos del personaje
+    // Sonidos del personaje
     public AudioSource audioSource;
-    public AudioClip turnClothSound; //Sonido de ropa cuando gira
-    public AudioClip flashlightClickSound; //Click de encencido y apagado
+    public AudioClip turnClothSound;       // Sonido de ropa cuando gira
+    public AudioClip flashlightClickSound; // Click de encendido y apagado
     public AudioClip flashlightHumLoop;
     public AudioClip deathSound;
 
     private AudioSource humSource; // Fuente separada para el zumbido
-
     public Transform lightHolder;
 
+    private bool hasWon = false;
 
     void Start()
     {
@@ -29,12 +29,13 @@ public class NewBehaviourScript : MonoBehaviour
         {
             linterna.enabled = false;  // Apagar linterna al inicio
         }
-        // Forzar reproduccion zumbido linterna
+
+        // Fuente de audio para el zumbido de la linterna
         humSource = gameObject.AddComponent<AudioSource>();
         humSource.clip = flashlightHumLoop;
         humSource.loop = true;
         humSource.playOnAwake = false;
-        humSource.volume = 0.7f;          
+        humSource.volume = 0.7f;
         humSource.spatialBlend = 0f;
     }
 
@@ -50,7 +51,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         estaGirando = true;
 
-        // 1. Sonido de ropa al girar
+        // Sonido de ropa al girar
         if (audioSource != null && turnClothSound != null)
             audioSource.PlayOneShot(turnClothSound);
 
@@ -58,17 +59,16 @@ public class NewBehaviourScript : MonoBehaviour
         if (animator != null)
             animator.SetTrigger("isTurning");
 
-        // Esperar la duración de la animación (ajústalo si tu animación dura más o menos)
+        // Esperar la duración de la animación
         yield return new WaitForSeconds(0.7f);
 
-        // 2. Sonido de click al encender/apagar
+        // Sonido de click al encender/apagar
         if (audioSource != null && flashlightClickSound != null)
             audioSource.PlayOneShot(flashlightClickSound);
 
         // Rotar manualmente la luz si tienes un LightHolder separado
         if (lightHolder != null)
         {
-            // Girar 180 grados desde la rotación actual del personaje
             lightHolder.rotation = Quaternion.Euler(0, player.eulerAngles.y, 0);
         }
 
@@ -76,7 +76,7 @@ public class NewBehaviourScript : MonoBehaviour
         if (linterna != null)
             linterna.enabled = !linterna.enabled;
 
-        // 3. Zumbido de linterna (activo solo si está encendida)
+        // Zumbido de linterna (activo solo si está encendida)
         if (humSource != null)
         {
             if (linterna.enabled && flashlightHumLoop != null)
@@ -85,10 +85,34 @@ public class NewBehaviourScript : MonoBehaviour
                 humSource.Stop();
         }
 
-        // Detener al ChainChomp si está cerca
+        // Detener al ChainChomp si está cerca (comprobación adicional para evitar null)
         if (chompController != null)
+        {
             chompController.StopMovement();
+            hasWon = true;
+
+            // Llamar a la pantalla de victoria desde el GameManager si gana
+            if (hasWon)
+            {
+                GameManager gameManager = FindObjectOfType<GameManager>();
+                if (gameManager != null)
+                {
+                    gameManager.SaveDistance();
+                    gameManager.WinGame();
+
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError("GameManager no encontrado en la escena.");
+                }
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("chompController no está asignado en el script NewBehaviourScript.");
+        }
 
         estaGirando = false;
     }
+
 }

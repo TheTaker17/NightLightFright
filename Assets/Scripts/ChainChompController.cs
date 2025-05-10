@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using UnityEngine;
 
 public class ChainChompController : MonoBehaviour
@@ -12,7 +11,7 @@ public class ChainChompController : MonoBehaviour
 
     private bool isStopped = false;
 
-    //Variables para sonidos de movimento chainchomp
+    // Sonidos de movimiento del ChainChomp
     public AudioSource moveAudioSource;
     public AudioClip movementSoundLoop;
     public AudioClip stopSound;
@@ -36,7 +35,6 @@ public class ChainChompController : MonoBehaviour
         moveAudioSource.playOnAwake = false;
         moveAudioSource.volume = 1f;
         moveAudioSource.spatialBlend = 0f;
-
     }
 
     void Update()
@@ -50,12 +48,14 @@ public class ChainChompController : MonoBehaviour
 
             if (distanceToPlayer > stopDistance)
             {
+                // Movimiento hacia el jugador
                 transform.position += -transform.right * speed * Time.deltaTime;
                 speed += acceleration * Time.deltaTime;
 
+                // Sonido de movimiento
                 if (!moveAudioSource.isPlaying && movementSoundLoop != null)
                 {
-                    moveAudioSource.pitch = UnityEngine.Random.Range(1f, 1.05f); // Variación sutil
+                    moveAudioSource.pitch = UnityEngine.Random.Range(1f, 1.05f);
                     moveAudioSource.Play();
                 }
             }
@@ -67,23 +67,37 @@ public class ChainChompController : MonoBehaviour
                 // Obtener referencia al script del jugador
                 var playerScript = player.GetComponent<NewBehaviourScript>();
 
+                // Verificar si la linterna está apagada (indica derrota)
                 if (playerScript != null && playerScript.linterna != null && !playerScript.linterna.enabled)
                 {
-                    // Reproducir animación de muerte
+                    // Animación de muerte
                     if (playerAnimator != null)
                     {
                         playerAnimator.SetBool("isDead", true);
                     }
 
-                    // Reproducir sonido de muerte
+                    // Sonido de muerte
                     if (playerScript.audioSource != null && playerScript.deathSound != null)
                     {
                         playerScript.audioSource.PlayOneShot(playerScript.deathSound, 1f);
                     }
 
-                    //Parar sonido de movimiento chainchomp
+                    // Parar sonido de movimiento
                     if (moveAudioSource != null && moveAudioSource.isPlaying)
                         moveAudioSource.Stop();
+
+                    // Llamar a la pantalla de derrota desde el GameManager
+
+                    FindObjectOfType<GameManager>().SaveDistance();
+                    FindObjectOfType<GameManager>().LoseGame();
+                }
+                else
+                {
+                    // Si la linterna está encendida, el jugador ha ganado
+                    if (playerScript != null && playerScript.linterna.enabled)
+                    {
+                        FindObjectOfType<GameManager>().WinGame();
+                    }
                 }
             }
         }
@@ -93,20 +107,20 @@ public class ChainChompController : MonoBehaviour
     {
         isStopped = true;
 
-        //Parar sonido de movimiento chainchomp
+        // Parar sonido de movimiento
         if (moveAudioSource != null && moveAudioSource.isPlaying)
             moveAudioSource.Stop();
 
-        // Reproducir sonido de frenado 
+        // Sonido de frenado
         if (moveAudioSource != null && stopSound != null)
         {
             moveAudioSource.PlayOneShot(stopSound);
-        }        
+        }
     }
 
     public float GetDistanceToPlayer()
     {
-        if(player == null) return Mathf.Infinity;
+        if (player == null) return Mathf.Infinity;
 
         Vector3 pos1 = new Vector3(transform.position.x, 0, transform.position.z);
         Vector3 pos2 = new Vector3(player.position.x, 0, player.position.z);
@@ -114,4 +128,3 @@ public class ChainChompController : MonoBehaviour
         return Vector3.Distance(pos1, pos2);
     }
 }
-
