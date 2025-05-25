@@ -1,30 +1,26 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static System.Net.Mime.MediaTypeNames;
-using TMPro;  // Añadir esta línea
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public float delayBeforeSceneChange = 5f; // Tiempo de espera antes de cambiar de escena (solo para victoria/derrota)
+    public float delayBeforeSceneChange = 5f;
 
-    public TMP_Text distanceText;        // Referencia al objeto de texto
-    public TMP_Text scoreText;           // Referencia al score
-    public ChainChompController chainChomp;  // Referencia al ChainChomp
-    public Transform player;             // Referencia al jugador
-    private static float finalDistance;  // Variable estática para almacenar la distancia final
-    private static int finalScore;      // Variable estática para almacenar el puntaje
+    public TMP_Text distanceText;
+    public TMP_Text scoreText;
+    public ChainChompController chainChomp;
+    public Transform player;
+    private static float finalDistance;
+    private static int finalScore;
 
     void Start()
     {
-        // Intentar encontrar los textos en la escena actual
         distanceText = GameObject.Find("DistanceText")?.GetComponent<TMP_Text>();
         scoreText = GameObject.Find("ScoreText")?.GetComponent<TMP_Text>();
 
         string currentScene = SceneManager.GetActiveScene().name;
-
-        if (currentScene == "VictoryScene" || currentScene == "DefeatScene")
+        if (currentScene.Contains("Victoria") || currentScene.Contains("Derrota"))
         {
             ShowResults();
         }
@@ -46,11 +42,10 @@ public class GameManager : MonoBehaviour
 
     private int CalculateScore(float distance)
     {
-        // Cuanto más cerca esté el enemigo, mayor el puntaje (máximo 100)
         if (distance <= 60) return 100;
         if (distance <= 80) return 75;
         if (distance <= 110) return 50;
-        if (distance <= 150) return 25;
+        if (distance <= 200) return 25;
         return 10;
     }
 
@@ -79,12 +74,12 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("SampleScene"); // Cambia por el nombre correcto
+        SceneManager.LoadScene("SampleScene");
     }
 
     public void Rules()
     {
-        SceneManager.LoadScene("PantallaReglas"); // Cambia por el nombre correcto
+        SceneManager.LoadScene("PantallaReglas");
     }
 
     public void ExitGame()
@@ -101,20 +96,34 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
-        StartCoroutine(DelayedSceneChange("PantallaVictoria")); // Cambia el nombre de la escena de victoria
+        SaveDistance();
+        string victoriaScene = GetVictoryScene(finalScore);
+        StartCoroutine(DelayedSceneChange(victoriaScene));
     }
 
     public void LoseGame()
     {
-        StartCoroutine(DelayedSceneChange("PantallaDerrota")); // Cambia el nombre de la escena de derrota
+        SaveDistance();
+        StartCoroutine(DelayedSceneChange("PantallaDerrota"));
+    }
+
+    private string GetVictoryScene(int score)
+    {
+        switch (score)
+        {
+            case 100: return "Victoria100";
+            case 75: return "Victoria75";
+            case 50: return "Victoria50";
+            case 25: return "Victoria25";
+            default: return "Victoria10";
+        }
     }
 
     private IEnumerator DelayedSceneChange(string sceneName)
     {
-        // Solo aplica el retraso si estamos en la escena del juego
-        if (SceneManager.GetActiveScene().name == "SampleScene") // Cambia por el nombre de tu escena de juego
+        if (SceneManager.GetActiveScene().name == "SampleScene")
         {
-            yield return new WaitForSeconds(delayBeforeSceneChange); // Espera de 5 segundos
+            yield return new WaitForSeconds(delayBeforeSceneChange);
         }
         SceneManager.LoadScene(sceneName);
     }

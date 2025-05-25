@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/PantallaVictoria.unity
+    path: Assets/Scenes/Victoria75.unity
     guid: b687c4304b9ea3345b01dab947cbb830
   - enabled: 1
     path: Assets/Scenes/PantallaDerrota.unity
@@ -20,4 +20,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PantallaReglas.unity
     guid: cc21ab8822a31fc45a45f08ef2e9371b
+  - enabled: 1
+    path: Assets/Scenes/Victoria100.unity
+    guid: 652ea116e9aae4845b90301b7949cc45
+  - enabled: 1
+    path: Assets/Scenes/Victoria50.unity
+    guid: 72a00ce019a584e4e830f27fe97d13f0
+  - enabled: 1
+    path: Assets/Scenes/Victoria25.unity
+    guid: 59a0e45f76b3ffe4e8d745f373224a39
+  - enabled: 1
+    path: Assets/Scenes/Victoria10.unity
+    guid: bf0d1da04146ff7408695e3ac1155113
   m_configObjects: {}
